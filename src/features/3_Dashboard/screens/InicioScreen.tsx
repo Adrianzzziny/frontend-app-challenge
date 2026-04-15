@@ -20,9 +20,6 @@ export default function InicioScreen() {
         />
         
         <View className="flex-row items-center gap-3">
-          <Text className="text-[12px] font-medium text-gray-600 hidden sm:block">
-            Tienes <Text className="font-bold text-gray-800">2500</Text> Koinks 🪙
-          </Text>
           
           <TouchableOpacity onPress={logout} className="flex-row items-center gap-1 border-l border-gray-200 pl-3">
             <View className="w-7 h-7 rounded-full border border-[#14E2B1] items-center justify-center bg-gray-50">

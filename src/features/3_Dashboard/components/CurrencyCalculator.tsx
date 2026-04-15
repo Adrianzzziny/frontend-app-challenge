@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useOperationStore } from '../store/operation.store';
+import { useRouter } from 'expo-router';
 
 export default function CurrencyCalculator() {
   const { setCalculatorData } = useOperationStore();
@@ -18,6 +19,8 @@ export default function CurrencyCalculator() {
 
   const sendCurrency = activeTab === 'compra' ? 'Dólares' : 'Soles';
   const receiveCurrency = activeTab === 'compra' ? 'Soles' : 'Dólares';
+
+  const router = useRouter();
 
   const fetchCurrentRates = async () => {
     try {
@@ -92,6 +95,7 @@ export default function CurrencyCalculator() {
       rateCompra: rates.compra, rateVenta: rates.venta
     });
     console.log("¡Redirigir a Operación!");
+    router.push('/operacion/completa');
   };
 
   const koinksGanados = Math.floor(parseFloat(activeTab === 'compra' ? sendAmount : receiveAmount) || 0).toLocaleString();

@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Ionicons } from '@expo/vector-icons';
 import logoKambista from '../../../../assets/images/logoKambista.png';
+import { useRouter } from 'expo-router';
 
 import { loginSchema, LoginFormValues } from '../utils/loginSchema';
 import BaseInput from '../../../shared/components/ui/BaseInput';
@@ -12,6 +13,7 @@ import { useAuthStore } from '../store/auth.store';
 export default function LoginForm() {
   const { login, isLoading } = useAuthStore();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -20,7 +22,7 @@ export default function LoginForm() {
     formState: { errors, isValid },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    mode: 'onChange', // Validación en tiempo real
+    mode: 'onChange',
     defaultValues: {
       email: '',
       password: '',
@@ -32,6 +34,7 @@ export default function LoginForm() {
   const onSubmit = async (values: LoginFormValues) => {
     try {
       await login(values);
+      router.replace('/inicio');
     } catch (error: any) {
       if (error?.data?.name === 'INVALID_CREDENTIALS') {
         setError('password', { message: error.data.message });
@@ -137,7 +140,7 @@ export default function LoginForm() {
       </View>
 
       {/* ENLACE DE REGISTRO */}
-      <Text className="text-center text-sm text-gray-500 mt-8">
+      <Text onPress={() => router.push('/registro')} className="text-center text-sm text-gray-500 mt-8">
         ¿No tienes cuenta?{' '}
           <Text className="text-gray-600 underline decoration-gray-300 font-medium">
             Regístrate aquí

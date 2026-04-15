@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import { useRouter } from 'expo-router';
 
 import { personalDataSchema, PersonalDataFormValues } from '../utils/personalDataSchema';
 import { useAuthStore } from '../../1_Auth/store/auth.store';
@@ -38,19 +39,17 @@ const NativeSelect = ({ value, onChange, options, placeholder }: any) => {
   return (
     <>
       <TouchableOpacity 
-  onPress={() => { setTempValue(value || options[0].value); setModalVisible(true); }}
-  className="w-full border border-gray-300 rounded-lg bg-white h-12 flex-row justify-between items-center px-3" // 👈 flex-1 → w-full
-  activeOpacity={0.7}
->
-  <Text className={`text-[15px] ${value ? 'text-[#011B33]' : 'text-gray-400'}`}>{selectedLabel}</Text>
-  <Ionicons name="chevron-down" size={18} color="#6B7280" />
-</TouchableOpacity>
+        onPress={() => { setTempValue(value || options[0].value); setModalVisible(true); }}
+        className="w-full border border-gray-300 rounded-lg bg-white h-12 flex-row justify-between items-center px-3"
+        activeOpacity={0.7}
+      >
+        <Text className={`text-[15px] ${value ? 'text-[#011B33]' : 'text-gray-400'}`}>{selectedLabel}</Text>
+        <Ionicons name="chevron-down" size={18} color="#6B7280" />
+      </TouchableOpacity>
 
       <Modal transparent visible={modalVisible} animationType="slide">
-        {/* Fondo oscuro semi-transparente para hacer foco en el modal */}
         <View className="flex-1 justify-end bg-black/20">
           <View className="bg-white pb-8">
-            {/* Toolbar Gris calcada a la foto */}
             <View className="flex-row justify-between bg-[#F2F2F7] px-4 py-3 border-t border-gray-300">
               <TouchableOpacity onPress={() => { onChange(tempValue); setModalVisible(false); }}>
                 <Text className="text-[#007AFF] font-semibold text-[17px]">Aceptar</Text>
@@ -59,8 +58,6 @@ const NativeSelect = ({ value, onChange, options, placeholder }: any) => {
                 <Text className="text-[#007AFF] text-[17px]">Cancelar</Text>
               </TouchableOpacity>
             </View>
-            
-            {/* Rueda nativa de iOS */}
             <Picker selectedValue={tempValue} onValueChange={setTempValue}>
               {options.map((opt: any) => (
                 <Picker.Item key={opt.value} label={opt.label} value={opt.value} color="#011B33" />
@@ -74,7 +71,8 @@ const NativeSelect = ({ value, onChange, options, placeholder }: any) => {
 };
 
 export default function PersonalDataForm() {
-  const { submitPersonalData, isLoading } = useAuthStore();
+  const { submitPersonalData, isLoading, logout } = useAuthStore();
+  const router = useRouter();
 
   const { control, handleSubmit, setError, formState: { errors, isValid } } = useForm<PersonalDataFormValues>({
     resolver: zodResolver(personalDataSchema),
@@ -88,7 +86,7 @@ export default function PersonalDataForm() {
   const onSubmit = async (values: PersonalDataFormValues) => {
     try {
       await submitPersonalData(values);
-      console.log("Datos enviados:", values);
+      router.push('/onboarding/exito');
     } catch (error: any) {
       if (error.data?.name === 'DUPLICATE_DNI') {
         setError('documentNumber', { message: error.data.message });
@@ -97,18 +95,18 @@ export default function PersonalDataForm() {
   };
 
   const CheckboxItem = ({ label, value, onChange, error }: any) => (
-  <View className="mb-4">
-    <TouchableOpacity onPress={() => onChange(!value)} className="flex-row items-start gap-2.5" activeOpacity={0.7}>
-      <View className={`w-[18px] h-[18px] border rounded-sm items-center justify-center mt-0.5 ${value ? 'border-[#14E2B1] bg-[#14E2B1]' : 'border-gray-300'}`}>
-        {value ? <Ionicons name="checkmark" size={14} color="white" /> : null}
-      </View>
-      <Text className="flex-1 text-[12px] leading-tight text-[#011B33]">
-        {label}
-      </Text>
-    </TouchableOpacity>
-    {error ? <Text className="text-red-500 text-[10px] mt-0.5 ml-7">{error}</Text> : null}
-  </View>
-);
+    <View className="mb-4">
+      <TouchableOpacity onPress={() => onChange(!value)} className="flex-row items-start gap-2.5" activeOpacity={0.7}>
+        <View className={`w-[18px] h-[18px] border rounded-sm items-center justify-center mt-0.5 ${value ? 'border-[#14E2B1] bg-[#14E2B1]' : 'border-gray-300'}`}>
+          {value ? <Ionicons name="checkmark" size={14} color="white" /> : null}
+        </View>
+        <Text className="flex-1 text-[12px] leading-tight text-[#011B33]">
+          {label}
+        </Text>
+      </TouchableOpacity>
+      {error ? <Text className="text-red-500 text-[10px] mt-0.5 ml-7">{error}</Text> : null}
+    </View>
+  );
 
   return (
     <View className="flex-1 px-5 pt-2 pb-4 bg-white justify-between">
@@ -117,11 +115,12 @@ export default function PersonalDataForm() {
       <View>
         {/* HEADER */}
         <View className="flex-row items-center justify-between mb-4 mt-2">
-          <TouchableOpacity className="p-2 -ml-2" activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.back()} className="p-2 -ml-2" activeOpacity={0.7}>
             <Ionicons name="chevron-back" size={24} color="#011B33" />
           </TouchableOpacity>
           <Text className="text-lg font-bold text-[#011B33]">Completa tus datos</Text>
-          <TouchableOpacity className="p-2 -mr-2" activeOpacity={0.7}>
+          
+          <TouchableOpacity onPress={() => { logout(); router.replace('/login'); }} className="p-2 -mr-2" activeOpacity={0.7}>
             <Ionicons name="log-out-outline" size={24} color="#011B33" />
           </TouchableOpacity>
         </View>
@@ -160,11 +159,11 @@ export default function PersonalDataForm() {
 
           {/* BANNER AZUL */}
           <View className="bg-[#E5F0FF] rounded-lg py-1 px-3 flex-row gap-1 items-center">
-  <Ionicons name="information-circle-outline" size={18} color="#011B33" />
-  <Text className="flex-1 text-[11px] text-[#011B33] leading-tight">
-    Tu documento de identidad debe coincidir con tus datos para evitar inconvenientes al momento de hacer una primera operación.
-  </Text>
-</View>
+            <Ionicons name="information-circle-outline" size={18} color="#011B33" />
+            <Text className="flex-1 text-[11px] text-[#011B33] leading-tight">
+              Tu documento de identidad debe coincidir con tus datos para evitar inconvenientes al momento de hacer una primera operación.
+            </Text>
+          </View>
 
           {/* FILA CELULAR Y FECHA */}
           <View className="flex-row gap-x-3">

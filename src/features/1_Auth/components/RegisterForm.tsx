@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 import { registerSchema, RegisterFormValues } from '../utils/registerSchema';
 import BaseInput from '../../../shared/components/ui/BaseInput';
@@ -11,6 +12,7 @@ export default function RegisterForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -35,6 +37,7 @@ export default function RegisterForm() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsLoading(false);
     console.log('Registro exitoso:', values.email);
+    router.push('/onboarding/datos');
   };
 
   const CheckboxItem = ({ label, value, onChange, error }: any) => (
@@ -58,7 +61,7 @@ export default function RegisterForm() {
       {/* HEADER */}
       <View>
         <View className="flex-row items-center mb-6">
-          <TouchableOpacity className="p-2 -ml-2" activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.back()} className="p-2 -ml-2" activeOpacity={0.7}>
             <Ionicons name="chevron-back" size={24} color="#011B33" />
           </TouchableOpacity>
           <Text className="flex-1 text-center text-lg font-bold text-[#011B33] pr-6">
@@ -195,7 +198,7 @@ export default function RegisterForm() {
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.7} className="mt-6">
+        <TouchableOpacity onPress={() => router.replace('/login')} activeOpacity={0.7} className="mt-6">
           <Text className="text-center text-sm text-gray-500">
             ¿Ya tienes cuenta? <Text className="text-gray-600 underline font-medium">Ingresa aquí</Text>
           </Text>

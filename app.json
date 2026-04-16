@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "scheme": "kambista",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/kambistaicon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/kambistaicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#f5f6f8"
     },

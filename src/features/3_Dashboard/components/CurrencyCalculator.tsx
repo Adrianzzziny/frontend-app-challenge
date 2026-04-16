@@ -24,11 +24,12 @@ export default function CurrencyCalculator() {
 
   const router = useRouter();
 
-  const fetchCurrentRates = async () => {
+const fetchCurrentRates = async () => {
     try {
-      const response = await api.get('/exchange/current');
+      const response = await api.get('/exchange/kambista/current'); 
       const data = response.data;
-      setRates({ compra: data?.tc?.bid || 3.321, venta: data?.tc?.ask || 3.350 });
+      
+      setRates({ compra: data?.bid || 3.321, venta: data?.ask || 3.350 });
     } catch (error) {
       console.error('Error obteniendo TC:', error);
     }

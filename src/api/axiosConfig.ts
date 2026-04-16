@@ -2,7 +2,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 export const api = axios.create({
-  baseURL: 'https://api.kambista-clone.com/v1',
+  baseURL: 'https://api.kambista.com/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -52,9 +52,14 @@ mock.onPost('/users/personal-data').reply((config) => {
 });
 
 // CALCULADORA
-
-mock.onGet(/\/exchange\/current.*/).reply(200, {
-  tc: { bid: 3.820, ask: 3.850 } 
+mock.onGet('/exchange/kambista/current').reply(200, {
+  "bid": 3.418,
+  "bidChange": 1,
+  "ask": 3.463,
+  "askChange": 1,
+  "date": "2026-04-15",
+  "author": "5a130edf17ab90001d731ce9",
+  "created": "2026-04-16T01:25:26.583Z"
 });
 
 mock.onGet(/\/exchange\/calculates.*/).reply((config) => {
@@ -62,19 +67,34 @@ mock.onGet(/\/exchange\/calculates.*/).reply((config) => {
   const amount = parseFloat(params.amount || '0');
   const originCurrency = params.originCurrency;
   
-  const bid = 3.820;
-  const ask = 3.850;
+  const bid = 3.418;
+  const ask = 3.463;
   let exchange = 0;
+  let rate = 0;
 
+  // Lógica de conversión
   if (originCurrency === 'USD') {
     exchange = amount * bid;
+    rate = bid;
   } else {
     exchange = amount / ask;
+    rate = ask;
   }
 
   return [200, {
-    tc: { bid, ask },
-    exchange: exchange,
-    savings: { amount: (exchange * 0.05).toFixed(2) }
+    "rate": rate,
+    "exchange": parseFloat(exchange.toFixed(2)),
+    "tc": {
+      "bid": bid,
+      "ask": ask
+    },
+    "data": {
+      "operate": true,
+      "msg": "Puede operar"
+    },
+    "savings": {
+      "amount": (exchange * 0.015).toFixed(2),
+      "currency": originCurrency === 'USD' ? 'S/' : '$'
+    }
   }];
 });

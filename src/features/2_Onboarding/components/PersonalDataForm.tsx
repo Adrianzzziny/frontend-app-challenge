@@ -1,78 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, Modal, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Platform, Modal} from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
+import NativeSelect from '../../../shared/components/ui/NativeSelect';
+import NativeDatePicker from '../../../shared/components/ui/NativeDatePicker';
 
 import { personalDataSchema, PersonalDataFormValues } from '../utils/personalDataSchema';
 import { useAuthStore } from '../../1_Auth/store/auth.store';
 import BaseInput from '../../../shared/components/ui/BaseInput';
+import DuplicateDocumentModal from './DuplicateDocumentModal';
 
-// --- COMPONENTE SELECTOR NATIVO ---
-const NativeSelect = ({ value, onChange, options, placeholder }: any) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [tempValue, setTempValue] = useState(value || options[0].value);
-
-  const selectedLabel = options.find((o: any) => o.value === value)?.label || placeholder;
-
-  // VERSIÓN ANDROID
-  if (Platform.OS === 'android') {
-    return (
-      <View className="w-full shrink-0 border border-gray-300 rounded-lg bg-white h-12 justify-center px-3 relative overflow-hidden">
-        <Text className={`text-[15px] ${value ? 'text-[#011B33]' : 'text-gray-400'}`}>{selectedLabel}</Text>
-        <Ionicons name="chevron-down" size={18} color="#6B7280" style={{ position: 'absolute', right: 12 }} />
-        <Picker
-          selectedValue={value}
-          onValueChange={onChange}
-          style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%' }}
-          mode="dialog"
-        >
-          {options.map((opt: any) => <Picker.Item key={opt.value} label={opt.label} value={opt.value} />)}
-        </Picker>
-      </View>
-    );
-  }
-
-  // VERSIÓN IOS
-  return (
-    <>
-      <TouchableOpacity 
-        onPress={() => { setTempValue(value || options[0].value); setModalVisible(true); }}
-        className="w-full border border-gray-300 rounded-lg bg-white h-12 flex-row justify-between items-center px-3"
-        activeOpacity={0.7}
-      >
-        <Text className={`text-[15px] ${value ? 'text-[#011B33]' : 'text-gray-400'}`}>{selectedLabel}</Text>
-        <Ionicons name="chevron-down" size={18} color="#6B7280" />
-      </TouchableOpacity>
-
-      <Modal transparent visible={modalVisible} animationType="slide">
-        <View className="flex-1 justify-end bg-black/20">
-          <View className="bg-white pb-8">
-            <View className="flex-row justify-between bg-[#F2F2F7] px-4 py-3 border-t border-gray-300">
-              <TouchableOpacity onPress={() => { onChange(tempValue); setModalVisible(false); }}>
-                <Text className="text-[#007AFF] font-semibold text-[17px]">Aceptar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text className="text-[#007AFF] text-[17px]">Cancelar</Text>
-              </TouchableOpacity>
-            </View>
-            <Picker selectedValue={tempValue} onValueChange={setTempValue}>
-              {options.map((opt: any) => (
-                <Picker.Item key={opt.value} label={opt.label} value={opt.value} color="#011B33" />
-              ))}
-            </Picker>
-          </View>
-        </View>
-      </Modal>
-    </>
-  );
-};
 
 export default function PersonalDataForm() {
   const { submitPersonalData, isLoading, logout } = useAuthStore();
   const router = useRouter();
+
+  const [isDuplicateModalOpen, setDuplicateModalOpen] = useState(false);
 
   const { control, handleSubmit, setError, formState: { errors, isValid } } = useForm<PersonalDataFormValues>({
     resolver: zodResolver(personalDataSchema),
@@ -89,7 +35,7 @@ export default function PersonalDataForm() {
       router.push('/onboarding/exito');
     } catch (error: any) {
       if (error.data?.name === 'DUPLICATE_DNI') {
-        setError('documentNumber', { message: error.data.message });
+        setDuplicateModalOpen(true);
       }
     }
   };
@@ -172,9 +118,16 @@ export default function PersonalDataForm() {
                 <BaseInput label="Celular" placeholder="Nº de celular" value={value} onChangeText={onChange} error={errors.phone?.message} keyboardType="phone-pad" maxLength={9} />
               )} />
             </View>
-            <View className="flex-1">
+            
+            {/* COMPONENTE FECHA */}
+            <View className="flex-1 mt-1.5">
               <Controller control={control} name="birthDate" render={({ field: { onChange, value } }) => (
-                <BaseInput label="Fecha de nacimiento" placeholder="DD/MM/AAAA" value={value} onChangeText={onChange} error={errors.birthDate?.message} keyboardType="numbers-and-punctuation" />
+                <NativeDatePicker 
+                  label="Fecha de nacimiento" 
+                  value={value} 
+                  onChange={onChange} 
+                  error={errors.birthDate?.message} 
+                />
               )} />
             </View>
           </View>
@@ -200,7 +153,7 @@ export default function PersonalDataForm() {
 
       {/* --- SECCIÓN INFERIOR --- */}
       <View>
-        <View className="mb-2">
+        <View className="mb-6">
           <Controller control={control} name="acceptTerms" render={({ field: { onChange, value } }) => (
             <CheckboxItem label={<Text>He leído y acepto los <Text className="font-bold underline">Términos y condiciones</Text></Text>} value={value} onChange={onChange} error={errors.acceptTerms?.message} />
           )} />
@@ -213,11 +166,16 @@ export default function PersonalDataForm() {
           onPress={handleSubmit(onSubmit)}
           disabled={!isValid || isLoading}
           activeOpacity={0.8}
-          className={`w-full py-4 rounded-lg flex-row justify-center items-center mt-2 ${!isValid || isLoading ? 'bg-[#c3eadd]' : 'bg-[#14E2B1]'}`}
+          className={`w-full py-4 rounded-lg flex-row justify-center items-center mt-2 mb-4 ${!isValid || isLoading ? 'bg-[#c3eadd]' : 'bg-[#14E2B1]'}`}
         >
           {isLoading ? <ActivityIndicator color="#011B33" /> : <Text className="font-bold text-[#011B33] tracking-wide">REGISTRARME</Text>}
         </TouchableOpacity>
       </View>
+
+      <DuplicateDocumentModal 
+        isOpen={isDuplicateModalOpen} 
+        onClose={() => setDuplicateModalOpen(false)} 
+      />
 
     </View>
   );

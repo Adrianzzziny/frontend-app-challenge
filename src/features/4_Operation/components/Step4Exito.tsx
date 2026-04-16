@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, BackHandler } from 'react-native';
+import { useRouter, Stack } from 'expo-router';
 import { useOperationStore } from '../../3_Dashboard/store/operation.store';
 
 import iconExito from '../../../../assets/images/iconConstanciaEnviada.png';
@@ -21,19 +21,34 @@ export default function Step4Exito() {
     router.replace('/inicio');
   };
 
+  useEffect(() => {
+    const onBackPress = () => {
+      handleGoHome();
+      return true;
+    };
+
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => subscription.remove();
+  }, []);
+
   return (
     <View className="flex-1 bg-[#f5f6f8]">
-      <ScrollView 
-        className="flex-1 px-5" 
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingVertical: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+      
+      <Stack.Screen 
+        options={{
+          gestureEnabled: false, 
+          headerBackVisible: false, 
+        }} 
+      />
+
+      <View className="flex-1 px-5 mt-14">
         
         {/* TARJETA PRINCIPAL BLANCA */}
-        <View className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-100">
+        <View className="bg-white rounded-xl shadow-sm p-5 mb-4 border border-gray-100">
           
           {/* ICONO DEL CHANCHITO */}
-          <View className="w-28 h-28 mx-auto mb-2 items-center justify-center">
+          <View className="w-28 h-28 mx-auto mb-1 items-center justify-center">
             <Image 
               source={iconExito} 
               style={{ width: 100, height: 100 }} 
@@ -42,7 +57,7 @@ export default function Step4Exito() {
           </View>
 
           {/* TÍTULO */}
-          <View className="border-b border-gray-200 pb-4 mb-6">
+          <View className="border-b border-gray-400 pb-4 mb-5">
             <Text className="text-xl font-bold text-[#011B33] text-center">
               ¡Constancia enviada!
             </Text>
@@ -92,14 +107,14 @@ export default function Step4Exito() {
         <TouchableOpacity 
           activeOpacity={0.8}
           onPress={handleGoHome}
-          className="w-full bg-[#14E2B1] py-4 rounded-lg shadow-sm"
+          className="w-full bg-[#00E3C2] py-4 rounded-lg shadow-sm"
         >
-          <Text className="text-center font-bold text-[#011B33] uppercase">
+          <Text className="text-center font-bold text-[#060F26] uppercase">
             Volver a inicio
           </Text>
         </TouchableOpacity>
 
-      </ScrollView>
+      </View>
     </View>
   );
 }

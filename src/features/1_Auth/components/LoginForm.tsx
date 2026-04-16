@@ -125,7 +125,7 @@ export default function LoginForm() {
           disabled={!isValid || isLoading}
           activeOpacity={0.8}
           className={`mt-[87px] w-full py-3.5 rounded-lg flex-row justify-center items-center ${
-            !isValid || isLoading ? 'bg-[#c3eadd]' : 'bg-[#14E2B1]'
+            !isValid || isLoading ? 'bg-[#B2E7DF]' : 'bg-[#00E3C2]'
           }`}
         >
           {isLoading ? (
@@ -134,7 +134,7 @@ export default function LoginForm() {
               <Text className="font-semibold text-gray-500">Ingresando...</Text>
             </>
           ) : (
-            <Text className="font-semibold text-[#011B33]">INICIA SESIÓN</Text>
+            <Text className="font-semibold text-[#060F26]">INICIA SESIÓN</Text>
           )}
         </TouchableOpacity>
       </View>

@@ -36,7 +36,7 @@ export default function Step2Transfiere() {
   return (
     <View className="flex-1 bg-[#f5f6f8]">
       {/* HEADER NAVEGACIÓN */}
-      <View className="bg-white px-5 pt-4 pb-3 flex-row items-center border-b border-gray-100">
+      <View className="bg-white px-5 pt-4 pb-2 flex-row items-center border-b border-gray-100">
         <TouchableOpacity onPress={() => router.back()} className="p-2 -ml-2 z-10" activeOpacity={0.7}>
           <Ionicons name="chevron-back" size={24} color="#011B33" />
         </TouchableOpacity>
@@ -45,12 +45,15 @@ export default function Step2Transfiere() {
         </Text>
       </View>
 
-      <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+      <View className="flex-1 px-5">
         
         {/* BARRA DE PROGRESO */}
-        <View className="flex-row items-center justify-between mt-6 mb-8 px-2 relative">
-          <View className="absolute top-1.5 left-12 right-6 h-0.5 bg-gray-300 z-0" />
-          <View className="absolute top-1.5 left-2 w-1/2 h-0.5 bg-[#011B33] z-0" />
+        <View className="flex-row items-center justify-between mt-2 mb-4 px-2 relative">
+          
+          <View className="absolute top-1.5 left-8 right-10 h-0.5 flex-row z-0 overflow-hidden">
+            <View className="flex-1 bg-[#011B33]" />
+            <View className="flex-1 bg-gray-300" />
+          </View>
           
           <View className="items-center z-10">
             <View className="w-3 h-3 rounded-full bg-[#011B33] mb-2" />
@@ -67,16 +70,16 @@ export default function Step2Transfiere() {
         </View>
 
         {/* TIEMPO DE EXPIRACIÓN */}
-        <Text className="text-[13px] text-gray-500 text-center mb-5">
+        <Text className="text-[12px] text-gray-500 text-center mb-3">
           El tipo de cambio podría actualizarse a las: 
-          <Text className="font-bold text-[#011B33] text-base ml-1"> {expirationTime}</Text>
+          <Text className="font-bold text-[#011B33] text-[14px] ml-1"> {expirationTime}</Text>
         </Text>
 
         {/* TARJETA PRINCIPAL */}
-        <View className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100 items-center">
+        <View className="bg-white rounded-xl shadow-sm p-4 mb-4 border border-gray-100 items-center">
           
           {/* ICONO */}
-          <View className="w-24 h-24 mb-6 items-center justify-center">
+          <View className="w-20 h-20 mb-4 items-center justify-center">
             <Image 
             source={iconoTransfiere} 
             style={{ width: 68, height: 74 }}
@@ -84,12 +87,12 @@ export default function Step2Transfiere() {
             />
         </View>
 
-          <Text className="text-[15px] text-gray-600 text-center leading-relaxed mb-6 px-2">
+          <Text className="text-[15px] text-gray-600 text-center leading-snug mb-3 px-2">
             Transfiere desde tu app bancaria y guarda el <Text className="font-bold text-[#011B33] underline">número o código de operación</Text> para el siguiente paso.
           </Text>
 
           {/* CAJA DE DATOS BANCARIOS */}
-          <View className="border border-gray-200 rounded-xl p-5 w-full space-y-4">
+          <View className="border border-gray-300 rounded-xl p-4 w-full space-y-1.5">
             
             <View>
               <Text className="text-xs text-gray-500 font-medium mb-0.5">Banco</Text>
@@ -143,12 +146,12 @@ export default function Step2Transfiere() {
         <TouchableOpacity 
           activeOpacity={0.8}
           onPress={() => router.push('/operacion/constancia')}
-          className="w-full bg-[#14E2B1] py-4 rounded-lg flex-row justify-center items-center mb-10 shadow-sm"
+          className="w-full bg-[#00E3C2] py-4 rounded-lg flex-row justify-center items-center mt-1 mb-8 shadow-sm"
         >
-          <Text className="font-bold text-[#011B33] uppercase">Ya hice mi transferencia</Text>
+          <Text className="font-bold text-[#060F26] uppercase">Ya hice mi transferencia</Text>
         </TouchableOpacity>
 
-      </ScrollView>
+      </View>
     </View>
   );
 }

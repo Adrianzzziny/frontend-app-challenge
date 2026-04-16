@@ -183,8 +183,8 @@ export default function CurrencyCalculator() {
       </View>
 
       {/* BOTÓN INICIAR OPERACIÓN */}
-      <TouchableOpacity onPress={startOperation} activeOpacity={0.8} className="w-full bg-[#14E2B1] py-3.5 rounded-lg flex-row justify-center items-center">
-        {isLoading ? <ActivityIndicator color="#011B33" /> : <Text className="font-bold text-[#011B33] tracking-wide text-[14px]">INICIAR OPERACIÓN</Text>}
+      <TouchableOpacity onPress={startOperation} activeOpacity={0.8} className="w-full bg-[#00E3C2] py-3.5 rounded-lg flex-row justify-center items-center">
+        {isLoading ? <ActivityIndicator color="#011B33" /> : <Text className="font-bold text-[#060F26] tracking-wide text-[14px]">INICIAR OPERACIÓN</Text>}
       </TouchableOpacity>
     </View>
   );

@@ -47,7 +47,7 @@ export default function RegisterForm() {
         className="flex-row items-start gap-3" 
         activeOpacity={0.7}
       >
-        <View className={`w-5 h-5 border rounded-sm items-center justify-center mt-0.5 ${value ? 'border-[#14E2B1] bg-[#14E2B1]' : 'border-gray-300'}`}>
+        <View className={`w-5 h-5 border rounded-sm items-center justify-center mt-0.5 ${value ? 'border-[#060F26] bg-[#060F26]' : 'border-gray-400'}`}>
           {value && <Ionicons name="checkmark" size={16} color="white" />}
         </View>
         <Text className="flex-1 text-[13px] leading-4 text-gray-600">{label}</Text>
@@ -116,7 +116,7 @@ export default function RegisterForm() {
                 error={errors.password?.message}
                 secureTextEntry={!isPasswordVisible}
                 suffix={
-                  <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)} className="p-1.5">
+                  <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)} className="p-1.5 top-1.5">
                     <Ionicons name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'} size={20} color="#9CA3AF" />
                   </TouchableOpacity>
                 }
@@ -137,7 +137,7 @@ export default function RegisterForm() {
                 error={errors.confirmPassword?.message}
                 secureTextEntry={!isConfirmPasswordVisible}
                 suffix={
-                  <TouchableOpacity onPress={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)} className="p-1.5">
+                  <TouchableOpacity onPress={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)} className="p-1.5 top-1.5">
                     <Ionicons name={isConfirmPasswordVisible ? 'eye-off-outline' : 'eye-outline'} size={20} color="#9CA3AF" />
                   </TouchableOpacity>
                 }
@@ -188,13 +188,13 @@ export default function RegisterForm() {
           disabled={!isValid || isLoading}
           activeOpacity={0.8}
           className={`w-full py-4 rounded-lg flex-row justify-center items-center ${
-            !isValid || isLoading ? 'bg-[#c3eadd]' : 'bg-[#14E2B1]'
+            !isValid || isLoading ? 'bg-[#B2E7DF]' : 'bg-[#00E3C2]'
           }`}
         >
           {isLoading ? (
             <ActivityIndicator color="#011B33" />
           ) : (
-            <Text className="font-bold text-[#011B33] text-sm tracking-wider">REGISTRARME</Text>
+            <Text className="font-bold text-[#060F26] text-sm tracking-wider">REGISTRARME</Text>
           )}
         </TouchableOpacity>
 

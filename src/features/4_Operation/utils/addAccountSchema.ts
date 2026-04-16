@@ -14,6 +14,22 @@ export const addAccountSchema = z.object({
   esPropia: z.boolean().refine(val => val === true, {
     message: 'Debes declarar que la cuenta es tuya',
   }),
+}).superRefine((data, ctx) => {
+  if (data.tipoCuenta === 'ahorro' && data.numeroCuenta.length !== 13) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'La cuenta de ahorro debe tener 13 dígitos exactos',
+      path: ['numeroCuenta'],
+    });
+  }
+  
+  if (data.tipoCuenta === 'corriente' && data.numeroCuenta.length !== 14) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'La cuenta corriente debe tener 14 dígitos exactos',
+      path: ['numeroCuenta'],
+    });
+  }
 });
 
 export type AddAccountFormValues = z.infer<typeof addAccountSchema>;

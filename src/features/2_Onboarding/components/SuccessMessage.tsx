@@ -16,19 +16,21 @@ export default function SuccessMessage() {
         resizeMode="contain"
       />
 
-      <Text className="text-2xl font-semibold text-gray-700 mb-2 text-center">
-        ¡Felicitaciones!
+      <Text className="text-2xl font-semibold text-[#060F26] mb-8 text-center">
+        ¡Felicitaciones! {firstName}, tu cuenta ha sido creada!
       </Text>
-      <Text className="text-lg text-gray-600 mb-10 text-center">
-        {firstName}, tu cuenta ha sido creada
-      </Text>
+      <Text className="text-base text-[#686868] mb-10 text-center">
+      Ya puedes empezar a{" "}
+      <Text className="italic">Kambiar</Text>
+      {" "}con la mejor tasa del mercado
+    </Text>
 
       <TouchableOpacity 
         activeOpacity={0.8}
-        className="w-full bg-[#14E2B1] py-4 rounded-lg shadow-sm"
+        className="w-full bg-[#00E3C2] py-4 rounded-lg shadow-sm"
         onPress={() => router.replace('/inicio')}
       >
-        <Text className="text-center font-bold text-[#011B33]">CONTINUAR</Text>
+        <Text className="text-center font-bold text-[#060F26]">CONTINUAR</Text>
       </TouchableOpacity>
     </View>
   );

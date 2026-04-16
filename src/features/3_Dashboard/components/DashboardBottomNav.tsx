@@ -15,8 +15,6 @@ const navLinks = [
 ];
 
 export default function DashboardBottomNav({ activeRoute = 'inicio' }: { activeRoute?: string }) {
-  
-  // Función para renderizar el SVG exacto según el ítem
   const renderIcon = (label: string, color: string) => {
     switch (label) {
       case 'Inicio': return <InicioIcon color={color} />;
@@ -33,8 +31,8 @@ export default function DashboardBottomNav({ activeRoute = 'inicio' }: { activeR
     <View 
       className="absolute bottom-0 w-full bg-white border-t border-gray-200 flex-row justify-around items-center px-2"
       style={{ 
-        height: Platform.OS === 'ios' ? 85 : 65,
-        paddingBottom: Platform.OS === 'ios' ? 20 : 0 
+        height: Platform.OS === 'ios' ? 85 : 95,
+        paddingBottom: Platform.OS === 'ios' ? 20 : 40 
       }}
     >
       {navLinks.map((link) => {

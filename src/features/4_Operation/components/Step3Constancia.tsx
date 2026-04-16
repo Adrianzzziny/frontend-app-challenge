@@ -49,7 +49,7 @@ export default function Step3Constancia() {
   return (
     <View className="flex-1 bg-[#f5f6f8]">
       {/* HEADER */}
-      <View className="bg-white px-5 pt-4 pb-3 flex-row items-center border-b border-gray-100">
+      <View className="bg-white px-5 pt-4 pb-1 flex-row items-center border-b border-gray-100">
         <TouchableOpacity onPress={() => router.back()} className="p-2 -ml-2 z-10" activeOpacity={0.7}>
           <Ionicons name="chevron-back" size={24} color="#011B33" />
         </TouchableOpacity>
@@ -58,12 +58,12 @@ export default function Step3Constancia() {
         </Text>
       </View>
 
-      <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+      <View className="flex-1 px-5">
         
         {/* BARRA DE PROGRESO */}
-        <View className="flex-row items-center justify-between mt-6 mb-8 px-2 relative">
-          <View className="absolute top-1.5 left-6 right-6 h-0.5 bg-gray-300 z-0" />
-          <View className="absolute top-1.5 left-6 right-6 h-0.5 bg-[#011B33] z-0" />
+        <View className="flex-row items-center justify-between mt-2 mb-4 px-2 relative">
+          <View className="absolute top-1.5 left-8 right-10 h-0.5 bg-gray-300 z-0" />
+          <View className="absolute top-1.5 left-8 right-10 h-0.5 bg-[#011B33] z-0" />
           
           <View className="items-center z-10">
             <View className="w-3 h-3 rounded-full bg-[#011B33] mb-2" />
@@ -80,10 +80,10 @@ export default function Step3Constancia() {
         </View>
 
         {/* TARJETA PRINCIPAL */}
-        <View className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100">
+        <View className="bg-white rounded-xl shadow-sm p-5 mb-8 border border-gray-100">
           
           {/* ILUSTRACIÓN */}
-          <View className="w-32 h-32 mx-auto mb-4 items-center justify-center">
+          <View className="w-24 h-24 mx-auto mb-2 items-center justify-center">
             <Image 
               source={iconConstancia} 
               style={{ width: 120, height: 120 }} 
@@ -91,12 +91,12 @@ export default function Step3Constancia() {
             />
           </View>
 
-          <Text className="text-[15px] text-gray-600 text-center leading-relaxed mb-6 px-2">
+          <Text className="text-[15px] text-gray-600 text-center leading-relaxed mb-4 px-2">
             Adjunta la constancia de tu transferencia para poder verificar tu operación.
           </Text>
 
           {/* CAJA DE SUBIDA DE ARCHIVO */}
-          <View className="border border-gray-200 rounded-xl p-5 mb-6">
+          <View className="border border-gray-200 rounded-xl p-5 mb-4">
             <Text className="text-[13px] text-[#011B33] font-medium mb-3">
               Sube el archivo de tu constancia
             </Text>
@@ -158,13 +158,13 @@ export default function Step3Constancia() {
           onPress={onSubmit}
           disabled={!selectedFile}
           className={`w-full py-4 rounded-lg flex-row justify-center items-center mb-10 shadow-sm ${
-            !selectedFile ? 'bg-[#c3eadd]' : 'bg-[#14E2B1]'
+            !selectedFile ? 'bg-[#B2E7DF]' : 'bg-[#00E3C2]'
           }`}
         >
-          <Text className="font-bold text-[#011B33] uppercase">Enviar Constancia</Text>
+          <Text className="font-bold text-[#060F26] uppercase">Enviar Constancia</Text>
         </TouchableOpacity>
 
-      </ScrollView>
+      </View>
     </View>
   );
 }

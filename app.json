@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "scheme": "kambista",
     "orientation": "portrait",
-    "icon": "./assets/kambistaicon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/kambistaicon.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#f5f6f8"
     },
@@ -18,15 +18,14 @@
     },
     "android": {
       "userInterfaceStyle": "light",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#f5f6f8",
-        "userInterfaceStyle": "light"
-      },
       "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.adrianzzziny.kambistareactnative"
+      "package": "com.adrianzzziny.kambistareactnative",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#f5f6f8"
+      }
     },
     "web": {
       "bundler": "metro",

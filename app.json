@@ -25,7 +25,8 @@
       },
       "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.adrianzzziny.kambistareactnative"
     },
     "web": {
       "bundler": "metro",
@@ -35,6 +36,12 @@
       "expo-router",
       "@react-native-community/datetimepicker",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e9785097-c6e8-40cf-93ff-b298ecc7af1d"
+      }
+    }
   }
 }

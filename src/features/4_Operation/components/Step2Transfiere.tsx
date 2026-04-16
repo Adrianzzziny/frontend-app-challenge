@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, Image, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as Clipboard from 'expo-clipboard';
@@ -87,8 +87,20 @@ export default function Step2Transfiere() {
             />
         </View>
 
-          <Text className="text-[15px] text-gray-600 text-center leading-snug mb-3 px-2">
-            Transfiere desde tu app bancaria y guarda el <Text className="font-bold text-[#011B33] underline">número o código de operación</Text> para el siguiente paso.
+          <Text className="text-[15px] text-gray-600 text-center leading-snug mb-3 px-2 font-normal">
+            Transfiere desde tu app bancaria y guarda el{' '}
+            <Text
+              className={`font-bold text-[#011B33] ${
+                Platform.OS === 'android'
+                  ? 
+                    'border-b-[1.5px] border-[#011B33] pb-[0.5px]'
+                  : 
+                    'underline'
+              }`}
+            >
+              número o código de operación
+            </Text>{' '}
+            para el siguiente paso.
           </Text>
 
           {/* CAJA DE DATOS BANCARIOS */}

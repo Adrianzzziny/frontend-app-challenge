@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import InicioIcon from '../../../shared/components/icons/InicioIcon';
 import HistorialIcon from '../../../shared/components/icons/HistorialIcon';
 import CuentasIcon from '../../../shared/components/icons/CuentasIcon';
@@ -15,6 +16,11 @@ const navLinks = [
 ];
 
 export default function DashboardBottomNav({ activeRoute = 'inicio' }: { activeRoute?: string }) {
+
+  const insets = useSafeAreaInsets();
+
+  const safeBottom = Platform.OS === 'android' ? Math.max(insets.bottom, 15) : (insets.bottom || 20);
+
   const renderIcon = (label: string, color: string) => {
     switch (label) {
       case 'Inicio': return <InicioIcon color={color} />;
@@ -31,8 +37,8 @@ export default function DashboardBottomNav({ activeRoute = 'inicio' }: { activeR
     <View 
       className="absolute bottom-0 w-full bg-white border-t border-gray-200 flex-row justify-around items-center px-2"
       style={{ 
-        height: Platform.OS === 'ios' ? 85 : 95,
-        paddingBottom: Platform.OS === 'ios' ? 20 : 40 
+        height: (Platform.OS === 'ios' ? 65 : 60) + safeBottom,
+        paddingBottom: safeBottom 
       }}
     >
       {navLinks.map((link) => {

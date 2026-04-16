@@ -3,6 +3,7 @@
     "name": "kambista-reactnative",
     "slug": "kambista-reactnative",
     "version": "1.0.0",
+    "scheme": "kambista",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

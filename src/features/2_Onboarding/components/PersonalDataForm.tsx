@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, ActivityIndicator, Platform, Modal} from 
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Ionicons } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import NativeSelect from '../../../shared/components/ui/NativeSelect';
 import NativeDatePicker from '../../../shared/components/ui/NativeDatePicker';
@@ -11,14 +10,14 @@ import NativeDatePicker from '../../../shared/components/ui/NativeDatePicker';
 import { personalDataSchema, PersonalDataFormValues } from '../utils/personalDataSchema';
 import { useAuthStore } from '../../1_Auth/store/auth.store';
 import BaseInput from '../../../shared/components/ui/BaseInput';
-import DuplicateDocumentModal from './DuplicateDocumentModal';
+import DuplicateDataModal from './DuplicateDataModal';
 
 
 export default function PersonalDataForm() {
   const { submitPersonalData, isLoading, logout } = useAuthStore();
   const router = useRouter();
 
-  const [isDuplicateModalOpen, setDuplicateModalOpen] = useState(false);
+  const [duplicateErrorType, setDuplicateErrorType] = useState<'DNI' | 'PHONE' | 'BOTH' | null>(null);
 
   const { control, handleSubmit, setError, formState: { errors, isValid } } = useForm<PersonalDataFormValues>({
     resolver: zodResolver(personalDataSchema),
@@ -34,9 +33,9 @@ export default function PersonalDataForm() {
       await submitPersonalData(values);
       router.push('/onboarding/exito');
     } catch (error: any) {
-      if (error.data?.name === 'DUPLICATE_DNI') {
-        setDuplicateModalOpen(true);
-      }
+      if (error.data?.name === 'DUPLICATE_DNI') setDuplicateErrorType('DNI');
+      else if (error.data?.name === 'DUPLICATE_PHONE') setDuplicateErrorType('PHONE');
+      else if (error.data?.name === 'DUPLICATE_BOTH') setDuplicateErrorType('BOTH');
     }
   };
 
@@ -172,9 +171,9 @@ export default function PersonalDataForm() {
         </TouchableOpacity>
       </View>
 
-      <DuplicateDocumentModal 
-        isOpen={isDuplicateModalOpen} 
-        onClose={() => setDuplicateModalOpen(false)} 
+      <DuplicateDataModal 
+        errorType={duplicateErrorType} 
+        onClose={() => setDuplicateErrorType(null)} 
       />
 
     </View>

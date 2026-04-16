@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { api } from '../../../api/axiosConfig';
 
 interface AuthState {
   user: Record<string, any> | null;
@@ -28,61 +29,45 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   login: async (credentials) => {
     set({ isLoading: true });
     
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const { user } = get();
-        const validEmail = user?.email || 'test@kambista.com';
-        
-        // SIMULADOR DE VALIDACIÓN
-        if (credentials.email !== validEmail || credentials.password !== '123456') {
-          set({ isLoading: false });
-          reject({
-            success: false,
-            data: {
-              name: "INVALID_CREDENTIALS",
-              message: "Correo o contraseña incorrectos."
-            }
-          });
-          return;
-        }
+    try {
+      const response = await api.post('/auth/login', credentials);
+      
+      set({
+        isLoading: false,
+        token: response.data.token,
+        user: response.data.user
+      });
+      return true;
 
-        set({
-          isLoading: false,
-          token: 'kambista_simulated_token_xyz',
-          user: user || { fullName: 'Test Kambista', email: credentials.email }
-        });
-        resolve(true);
-      }, 1200);
-    });
+    } catch (error: any) {
+      set({ isLoading: false });
+      return Promise.reject({
+        success: false,
+        data: error.response?.data || { name: 'UNKNOWN_ERROR', message: 'Error de red' }
+      });
+    }
   },
 
   submitPersonalData: async (personalData) => {
     set({ isLoading: true });
     
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // SIMULACIÓN DE ERROR API
-        if (personalData.documentNumber === '12345678') {
-          set({ isLoading: false });
-          reject({
-            success: false,
-            data: {
-              name: "DUPLICATE_DNI",
-              title: "DNI en uso",
-              message: "El número de documento registrado ya está en uso."
-            }
-          });
-          return;
-        }
+    try {
+      const response = await api.post('/users/personal-data', personalData);
 
-        set({
-          isLoading: false,
-          user: { ...personalData },
-          token: 'kambista_simulated_token_new_user'
-        });
-        resolve(true);
-      }, 1500);
-    });
+      set({
+        isLoading: false,
+        user: response.data.user,
+        token: response.data.token
+      });
+      return true;
+
+    } catch (error: any) {
+      set({ isLoading: false });
+      return Promise.reject({
+        success: false,
+        data: error.response?.data || { name: 'UNKNOWN_ERROR', message: 'Error de red' }
+      });
+    }
   },
 
   logout: () => set({ user: null, token: null })

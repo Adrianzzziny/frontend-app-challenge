@@ -95,7 +95,7 @@ export default function AddAccountModal({ isOpen, onClose, onAddAccount }: AddAc
                   )} />
                 </View>
 
-                <View className="bg-[#E5F0FF] rounded-lg p-3 flex-row gap-2 items-start mt-2">
+                <View className="bg-[#E5F0FF] rounded-lg p-3 flex-row gap-1 items-start mt-2">
                   <Ionicons name="information-circle-outline" size={18} color="#011B33" />
                   <Text className="flex-1 text-[11px] text-[#011B33] leading-tight">
                     Operamos en Lima con todos los bancos. Y en provincia con el BCP y cuentas digitales Interbank.

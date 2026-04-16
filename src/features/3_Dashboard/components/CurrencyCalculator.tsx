@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, InputAccessoryView, Keyboard, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useOperationStore } from '../store/operation.store';
 import { useRouter } from 'expo-router';
+
+import { api } from '../../../api/axiosConfig'; 
 
 export default function CurrencyCalculator() {
   const { setCalculatorData } = useOperationStore();
@@ -24,8 +26,8 @@ export default function CurrencyCalculator() {
 
   const fetchCurrentRates = async () => {
     try {
-      const response = await fetch('https://api.kambista.com/v1/exchange/kambista/current');
-      const data = await response.json();
+      const response = await api.get('/exchange/current');
+      const data = response.data;
       setRates({ compra: data?.tc?.bid || 3.321, venta: data?.tc?.ask || 3.350 });
     } catch (error) {
       console.error('Error obteniendo TC:', error);
@@ -47,8 +49,16 @@ export default function CurrencyCalculator() {
         const originCurrency = currentTab === 'compra' ? 'USD' : 'PEN';
         const destinationCurrency = currentTab === 'compra' ? 'PEN' : 'USD';
         
-        const response = await fetch(`https://api.kambista.com/v1/exchange/calculates?originCurrency=${originCurrency}&destinationCurrency=${destinationCurrency}&amount=${amount}&active=S`);
-        const data = await response.json();
+        const response = await api.get('/exchange/calculates', {
+          params: {
+            originCurrency,
+            destinationCurrency,
+            amount,
+            active: 'S'
+          }
+        });
+        
+        const data = response.data;
 
         if (data?.tc) {
           setRates({ compra: data.tc.bid, venta: data.tc.ask });
@@ -94,11 +104,12 @@ export default function CurrencyCalculator() {
       sendAmount, sendCurrency, receiveAmount, receiveCurrency,
       rateCompra: rates.compra, rateVenta: rates.venta
     });
-    console.log("¡Redirigir a Operación!");
     router.push('/operacion/completa');
   };
 
   const koinksGanados = Math.floor(parseFloat(activeTab === 'compra' ? sendAmount : receiveAmount) || 0).toLocaleString();
+
+  const inputAccessoryViewID = 'calculatorKeyboard';
 
   return (
     <View className="w-full max-w-md">
@@ -123,7 +134,7 @@ export default function CurrencyCalculator() {
             <View className="flex-row rounded-lg overflow-hidden border border-transparent bg-[#e9ecef] mb-2 h-[72px]">
               <View className="flex-1 px-4 justify-center">
                 <Text className="text-xs text-gray-500 font-medium mb-0.5">¿Cuánto envías?</Text>
-                <TextInput value={sendAmount} onChangeText={onSendInput} keyboardType="numeric" className="text-[20px] font-bold text-gray-800 p-0" />
+                <TextInput value={sendAmount} onChangeText={onSendInput} keyboardType="numeric" className="text-[20px] font-bold text-gray-800 p-0" inputAccessoryViewID={inputAccessoryViewID}/>
               </View>
               <TouchableOpacity className="bg-[#011B33] w-[110px] flex-row items-center justify-between px-3" activeOpacity={0.7}>
                 <Text className="font-semibold text-white text-[13px]">{sendCurrency}</Text>
@@ -140,7 +151,7 @@ export default function CurrencyCalculator() {
             <View className="flex-row rounded-lg overflow-hidden border border-transparent bg-[#e9ecef] h-[72px]">
               <View className="flex-1 px-4 justify-center">
                 <Text className="text-xs text-gray-500 font-medium mb-0.5">Entonces recibes</Text>
-                <TextInput value={receiveAmount} onChangeText={onReceiveInput} keyboardType="numeric" className="text-[20px] font-bold text-gray-800 p-0" />
+                <TextInput value={receiveAmount} onChangeText={onReceiveInput} keyboardType="numeric" className="text-[20px] font-bold text-gray-800 p-0" inputAccessoryViewID={inputAccessoryViewID}/>
               </View>
               <TouchableOpacity className="bg-[#011B33] w-[110px] flex-row items-center justify-between px-3" activeOpacity={0.7}>
                 <Text className="font-semibold text-white text-[13px]">{receiveCurrency}</Text>
@@ -186,6 +197,18 @@ export default function CurrencyCalculator() {
       <TouchableOpacity onPress={startOperation} activeOpacity={0.8} className="w-full bg-[#00E3C2] py-3.5 rounded-lg flex-row justify-center items-center">
         {isLoading ? <ActivityIndicator color="#011B33" /> : <Text className="font-bold text-[#060F26] tracking-wide text-[14px]">INICIAR OPERACIÓN</Text>}
       </TouchableOpacity>
+
+      {/* BARRA NATIVA PARA EL TECLADO DE IOS */}
+      {Platform.OS === 'ios' && (
+        <InputAccessoryView nativeID={inputAccessoryViewID}>
+          <View className="bg-[#f5f6f8] flex-row justify-end px-4 py-3 border-t border-gray-200 shadow-sm">
+            <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={0.7}>
+              <Text className="text-[#011B33] font-bold text-[16px]">Aceptar</Text>
+            </TouchableOpacity>
+          </View>
+        </InputAccessoryView>
+      )}
+
     </View>
   );
 }
